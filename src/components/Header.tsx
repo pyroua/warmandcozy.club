@@ -54,10 +54,8 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-[#D4E8E5]/50'
-          : 'bg-transparent'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-md border-b border-[#D4E8E5]/60 ${
+        scrolled ? 'shadow-md' : 'shadow-sm'
       }`}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -67,9 +65,9 @@ export default function Header() {
             <Image
               src="/images/logo.png"
               alt="Warm and Cozy"
-              width={233}
-              height={40}
-              className="h-8 md:h-10 w-auto object-contain"
+              width={280}
+              height={48}
+              className="h-9 sm:h-10 md:h-12 w-auto object-contain"
               priority
             />
           </Link>
