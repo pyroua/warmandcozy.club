@@ -63,24 +63,15 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link href={`/${locale}/`} className="flex items-center gap-3">
-            <div className="relative w-10 h-10 md:w-12 md:h-12 flex-shrink-0 rounded-full overflow-hidden bg-white">
-              <Image
-                src="/images/logo.png"
-                alt="Warm and Cozy Logo"
-                fill
-                className="object-contain p-0.5"
-                priority
-              />
-            </div>
-            <div className="hidden sm:block">
-              <div className="text-sm font-800 leading-tight" style={{ color: 'var(--color-teal-dark)' }}>
-                Schoonmaak
-              </div>
-              <div className="text-xs font-600 leading-tight" style={{ color: 'var(--color-gold)' }}>
-                Warm and Cozy
-              </div>
-            </div>
+          <Link href={`/${locale}/`} className="flex items-center shrink-0">
+            <Image
+              src="/images/logo.png"
+              alt="Warm and Cozy"
+              width={233}
+              height={40}
+              className="h-8 md:h-10 w-auto object-contain"
+              priority
+            />
           </Link>
 
           {/* Desktop nav */}

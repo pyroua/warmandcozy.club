@@ -37,17 +37,15 @@ export default function Footer() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="relative w-12 h-12 flex-shrink-0 bg-white rounded-full overflow-hidden">
-                <Image src="/images/logo.png" alt="Logo" fill className="object-contain p-1" />
-              </div>
-              <div>
-                <div className="font-800 text-white">Schoonmaak</div>
-                <div className="text-sm font-600" style={{ color: 'var(--color-gold-light)' }}>
-                  Warm and Cozy
-                </div>
-              </div>
-            </div>
+            <Link href={`/${locale}/`} className="inline-flex items-center mb-4">
+              <Image
+                src="/images/logo-dark.png"
+                alt="Warm and Cozy"
+                width={239}
+                height={44}
+                className="h-10 md:h-11 w-auto object-contain"
+              />
+            </Link>
             <p className="text-sm leading-relaxed mb-5" style={{ color: 'rgba(255,255,255,0.65)' }}>
               {t('tagline')}
             </p>
@@ -148,7 +146,7 @@ export default function Footer() {
 
         {/* Bottom row */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>
-          <span>© {year} Schoonmaak Warm and Cozy. {t('rights')}.</span>
+          <span>© {year} Warm and Cozy. {t('rights')}.</span>
           <div className="flex items-center gap-4">
             <span>KVK: 97095737</span>
             <span>BTW: NL005248356B86</span>

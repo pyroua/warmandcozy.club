@@ -29,20 +29,31 @@ export async function generateMetadata({
     title: "Schoonmaak Warm and Cozy | Veghel",
     description: descriptions[locale] || descriptions.nl,
     keywords: ['schoonmaak', 'Veghel', 'dieptereiniging', 'kantoorschoonmaak', 'schoonmaakbedrijf', 'cleaning', 'Eindhoven', 'Den Bosch'],
+    icons: {
+      icon: [
+        { url: '/favicon.ico', sizes: 'any' },
+        { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+        { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      ],
+      apple: [
+        { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      ],
+    },
+    manifest: '/manifest.webmanifest',
     openGraph: {
-      title: 'Schoonmaak Warm and Cozy',
+      title: 'Warm and Cozy',
       description: descriptions[locale] || descriptions.nl,
       url: 'https://warmandcozy.club',
       siteName: 'Warm and Cozy',
-      images: [{ url: '/images/hero.jpg', width: 1200, height: 630, alt: 'Warm and Cozy Schoonmaak' }],
+      images: [{ url: '/images/og-image.png', width: 1200, height: 630, alt: 'Warm and Cozy' }],
       locale: locale,
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'Schoonmaak Warm and Cozy | Veghel',
+      title: 'Warm and Cozy | Veghel',
       description: descriptions[locale] || descriptions.nl,
-      images: ['/images/hero.jpg'],
+      images: ['/images/og-image.png'],
     },
     alternates: {
       canonical: `https://warmandcozy.club`,
@@ -75,15 +86,15 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={nunito.variable}>
       <head>
-        <link rel="icon" href="/favicon.ico" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
-              "name": "Schoonmaak Warm and Cozy",
-              "image": "https://warmandcozy.club/images/logo.png",
+              "name": "Warm and Cozy",
+              "image": "https://warmandcozy.club/images/og-image.png",
+              "logo": "https://warmandcozy.club/images/logo.png",
               "telephone": "+31617615757",
               "email": "info@warmandcozy.club",
               "address": {
