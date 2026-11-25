@@ -1,0 +1,33 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "warmandcozy-club",
+  "compatibility_date": "2026-09-30",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./out",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "routes": [
+    {
+      "pattern": "warmandcozy.club/*",
+      "zone_id": "4ba7cebf5e37a4efeef5bca2ab7a8501"
+    },
+    {
+      "pattern": "www.warmandcozy.club/*",
+      "zone_id": "4ba7cebf5e37a4efeef5bca2ab7a8501"
+    }
+  ],
+  "env": {
+    "dev": {
+      "name": "warmandcozy-club-dev",
+      "workers_dev": true,
+      "routes": [
+        {
+          "pattern": "dev.warmandcozy.club/*",
+          "zone_id": "4ba7cebf5e37a4efeef5bca2ab7a8501"
+        }
+      ]
+    }
+  }
+}

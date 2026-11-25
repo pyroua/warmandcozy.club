@@ -1,0 +1,92 @@
+name: Deploy Production (warmandcozy.club)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-prod-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        id: install_deps
+        run: npm ci
+
+      - name: Quality Gate (Lint & Typecheck)
+        id: quality_gate
+        run: |
+          npm run lint
+          npm run typecheck
+
+      - name: Build Static Export (Next.js)
+        id: build_gate
+        run: npm run build
+
+      - name: Deploy to Cloudflare Workers Static Assets (Production)
+        id: deploy_cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: '4.166.0'
+          command: deploy -c wrangler.jsonc --env=""
+
+      - name: Run SRE Smoke Tests (Production)
+        id: smoke_tests
+        run: node scripts/smoke-test.js https://warmandcozy.club
+
+      - name: 🚨 Notify AI Queue on CI Failure
+        if: failure()
+        run: |
+          MSG=$(git log -1 --pretty=%B | head -n 1)
+          jq -n \
+            --argjson run_id "${{ github.run_id }}" \
+            --arg run_url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --arg workflow_name "${{ github.workflow }}" \
+            --arg branch "${{ github.ref_name }}" \
+            --arg commit_sha "${{ github.sha }}" \
+            --arg commit_message "$MSG" \
+            --arg repo "${{ github.repository }}" \
+            --arg install_deps "${{ steps.install_deps.outcome }}" \
+            --arg quality_gate "${{ steps.quality_gate.outcome }}" \
+            --arg build_gate "${{ steps.build_gate.outcome }}" \
+            --arg deploy_cf "${{ steps.deploy_cloudflare.outcome }}" \
+            --arg smoke_tests "${{ steps.smoke_tests.outcome }}" \
+            '{
+              run_id: $run_id,
+              run_url: $run_url,
+              workflow_name: $workflow_name,
+              branch: $branch,
+              commit_sha: $commit_sha,
+              commit_message: $commit_message,
+              repo: $repo,
+              failed_jobs: {
+                install_deps: $install_deps,
+                quality_gate: $quality_gate,
+                build_gate: $build_gate,
+                deploy_cloudflare: $deploy_cf,
+                smoke_tests: $smoke_tests
+              }
+            }' | curl -s -X POST "${{ secrets.STAFF_API_URL }}/api/webhooks/github-actions" \
+              -H "Authorization: Bearer ${{ secrets.CI_WEBHOOK_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              -d @- || true

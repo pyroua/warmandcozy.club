@@ -6,9 +6,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Phone, Mail } from 'lucide-react';
 
 
-const WHATSAPP_URL = 'https://api.whatsapp.com/send?phone=31617615757';
 const INSTAGRAM_URL = 'https://www.instagram.com/schoonmaak_warm.cozy/';
-const FACEBOOK_URL  = '#'; // будет добавлена позже
 
 export default function Footer() {
   const t = useTranslations('footer');

@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "test:smoke": "node scripts/smoke-test.js",
+    "deploy": "npm run build && npx wrangler deploy -c wrangler.jsonc --env=\"\""
   },
   "dependencies": {
     "lucide-react": "^1.21.0",
