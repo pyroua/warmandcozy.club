@@ -10,6 +10,7 @@ async function run() {
     { url: `${baseUrl}/llms.txt`, allowedStatuses: [200] },
     { url: `${baseUrl}/manifest.webmanifest`, allowedStatuses: [200] },
     { url: `${baseUrl}/favicon.ico`, allowedStatuses: [200] },
+    { url: "https://www.warmandcozy.club/", allowedStatuses: [301] },
   ];
 
   let failed = 0;
