@@ -90,3 +90,30 @@ jobs:
               -H "Authorization: Bearer ${{ secrets.CI_WEBHOOK_TOKEN }}" \
               -H "Content-Type: application/json" \
               -d @- || true
+
+      - name: ✅ Notify AI Queue on CI Success Recovery
+        if: success()
+        run: |
+          MSG=$(git log -1 --pretty=%B | head -n 1)
+          jq -n \
+            --arg status "success" \
+            --argjson run_id "${{ github.run_id }}" \
+            --arg run_url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --arg workflow_name "${{ github.workflow }}" \
+            --arg branch "${{ github.ref_name }}" \
+            --arg commit_sha "${{ github.sha }}" \
+            --arg commit_message "$MSG" \
+            --arg repo "${{ github.repository }}" \
+            '{
+              status: $status,
+              run_id: $run_id,
+              run_url: $run_url,
+              workflow_name: $workflow_name,
+              branch: $branch,
+              commit_sha: $commit_sha,
+              commit_message: $commit_message,
+              repo: $repo
+            }' | curl -s -X POST "${{ secrets.STAFF_API_URL }}/api/webhooks/github-actions" \
+              -H "Authorization: Bearer ${{ secrets.CI_WEBHOOK_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              -d @- || true
